@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-center fw-bold" style="color: #f16767;">Formulir Pendaftaran</h1>
+        <form action="submit_registration.php" method="POST" class="mt-4">
+            <!-- Nama Lengkap -->
+            <div class="mb-3">
+                <label for="namaLengkap" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" placeholder="Masukkan nama lengkap Anda" required>
+            </div>
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" required>
+            </div>
+            <!-- Pilihan Event -->
+            <div class="mb-3">
+                <label for="pilihanEvent" class="form-label">Pilihan Event</label>
+                <select class="form-select" id="pilihanEvent" name="pilihanEvent" required>
+                    <option value="" disabled selected>Pilih event</option>
+                </select>
+            </div>
+            <!-- Jumlah Tiket -->
+            <div class="mb-3">
+                <label for="jumlahTiket" class="form-label">Jumlah Tiket</label>
+                <input type="number" class="form-control" id="jumlahTiket" name="jumlahTiket" placeholder="Masukkan jumlah tiket" min="1" required oninput="updateTotalHarga()">
+            </div>
+            <!-- Total Harga -->
+            <div class="mb-3">
+                <label for="totalHarga" class="form-label">Total Harga</label>
+                <input type="text" class="form-control" id="totalHarga" name="totalHarga" readonly value="Rp 0">
+            </div>
+            <!-- Tombol Submit -->
+            <button type="submit" class="btn btn-lg" style="background-color: #f16767; color: #fff085;">Daftar</button>
+        </form>
+    </div>
+    <script>
+        const hargaPerTiket = 75000;
+
+        function updateTotalHarga() {
+            const jumlahTiket = document.getElementById('jumlahTiket').value;
+            const totalHarga = jumlahTiket * hargaPerTiket;
+            document.getElementById('totalHarga').value = `Rp ${totalHarga.toLocaleString('id-ID')}`;
+        }
+
+        // Mengisi dropdown pilihan event secara dinamis
+        document.addEventListener('DOMContentLoaded', () => {
+            const events = [
+                { id: 1, title: "Hindia Live Concert" },
+                { id: 2, title: "DEWA 19 Live Concert" },
+                { id: 3, title: "Bernadyan Live Concert" },
+                { id: 4, title: ".Feast Live Concert" },
+                { id: 5, title: "Sheila On 7 Live Concert" },
+                { id: 6, title: "Vierratale Live Concert" }
+            ];
+
+            const pilihanEvent = document.getElementById('pilihanEvent');
+            events.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.title;
+                option.textContent = event.title;
+                pilihanEvent.appendChild(option);
+            });
+
+            // Jika ada event yang dipilih sebelumnya (dari localStorage)
+            const selectedEvent = JSON.parse(localStorage.getItem('selectedEvent'));
+            if (selectedEvent) {
+                pilihanEvent.value = selectedEvent.title;
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
